@@ -477,5 +477,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # Sqlite
+*.db
 *.db-shm
 *.db-wal
