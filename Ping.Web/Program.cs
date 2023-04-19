@@ -19,6 +19,7 @@ using (var serviceScope = app.Services.CreateScope())
 {
     var services = serviceScope.ServiceProvider;
     var db = services.GetRequiredService<PingDbContext>();
+    db.Database.Migrate();
     db.SeedDb();
 }
 
