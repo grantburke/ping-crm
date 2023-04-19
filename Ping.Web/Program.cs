@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Ping.Core.Extensions;
 using Ping.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,17 @@ builder.Services.AddDbContext<PingDbContext>(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+#region SEED DB
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+    var db = services.GetRequiredService<PingDbContext>();
+    db.SeedDb();
+}
+
+#endregion
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -30,6 +42,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
 
 app.Run();
