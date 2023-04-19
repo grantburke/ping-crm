@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Ping.Web.Data.Models;
+namespace Ping.Data.Models;
 
 public class User : BaseEntity
 {

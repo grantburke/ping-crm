@@ -1,4 +1,4 @@
-namespace Ping.Web.Data.Models;
+namespace Ping.Data.Models;
 
 public class Timestamps : BaseEntity
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Ping.Web.Data.Models;
+using Ping.Data.Models;
 
-namespace Ping.Web.Data;
+namespace Ping.Data;
 
 public class PingDbContext : DbContext
 {

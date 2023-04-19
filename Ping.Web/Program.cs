@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Ping.Web.Data;
+using Ping.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

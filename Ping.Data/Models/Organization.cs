@@ -1,14 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Ping.Web.Data.Models;
+namespace Ping.Data.Models;
 
-public class Contact : BaseEntity
+public class Organization : BaseEntity
 {
     [Required]
-    public string FirstName { get; set; }
-
-    [Required]
-    public string LastName { get; set; }
+    public string Name { get; set; }
 
     [Required]
     [EmailAddress]
@@ -30,6 +27,5 @@ public class Contact : BaseEntity
     [Required]
     public string ZipCode { get; set; }
 
-    public int OrganizationId { get; set; }
-    public Organization Organization { get; set; }
+    public List<Contact> Contacts { get; set; } = new();
 }
