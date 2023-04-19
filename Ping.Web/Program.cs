@@ -5,7 +5,7 @@ using Ping.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("ping.db") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("ping.db");
 builder.Services.AddDbContext<PingDbContext>(options =>
     options.UseSqlite(connectionString));
 
