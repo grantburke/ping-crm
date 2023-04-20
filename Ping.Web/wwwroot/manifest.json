@@ -1,0 +1,21 @@
+{
+  "src/assets/svelte.svg": {
+    "file": "assets/svelte-a39f39b7.svg",
+    "src": "src/assets/svelte.svg"
+  },
+  "src/main.css": {
+    "file": "assets/main-ead3091d.css",
+    "src": "src/main.css"
+  },
+  "src/main.js": {
+    "assets": [
+      "assets/svelte-a39f39b7.svg"
+    ],
+    "css": [
+      "assets/main-ead3091d.css"
+    ],
+    "file": "assets/main-cfe232d0.js",
+    "isEntry": true,
+    "src": "src/main.js"
+  }
+}

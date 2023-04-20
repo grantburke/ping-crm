@@ -15,21 +15,21 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-#region SEED DB
-
-using (var serviceScope = app.Services.CreateScope())
-{
-    var services = serviceScope.ServiceProvider;
-    var db = services.GetRequiredService<PingDbContext>();
-    db.Database.Migrate();
-    db.SeedDb();
-}
-
-#endregion
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    #region SEED DB
+
+    using (var serviceScope = app.Services.CreateScope())
+    {
+        var services = serviceScope.ServiceProvider;
+        var db = services.GetRequiredService<PingDbContext>();
+        db.Database.Migrate();
+        db.SeedDb();
+    }
+
+    #endregion
+
     app.UseStaticFiles(new StaticFileOptions
     {
         FileProvider = new PhysicalFileProvider(
