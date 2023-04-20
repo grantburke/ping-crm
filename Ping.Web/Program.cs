@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Ping.Core.Extensions;
 using Ping.Data;
 
@@ -9,6 +10,7 @@ var connectionString = builder.Configuration.GetConnectionString("ping.db");
 builder.Services.AddDbContext<PingDbContext>(options =>
     options.UseSqlite(connectionString));
 
+builder.Services.AddRouting(opts => opts.LowercaseUrls = true);
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -26,7 +28,16 @@ using (var serviceScope = app.Services.CreateScope())
 #endregion
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(builder.Environment.ContentRootPath, "Client/public")
+        )
+    });
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.

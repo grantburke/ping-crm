@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Inertia.NET.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Ping.Data;
 using Ping.Web.ViewModels;
@@ -16,8 +17,8 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        var orgs = _db.Organizations.ToList();
-        return View(orgs);
+        // var orgs = _db.Organizations.ToList();
+        return this.InertiaRender("Home/Index");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
