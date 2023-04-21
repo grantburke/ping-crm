@@ -2,6 +2,6 @@
 	import PageLayout from '../../Shared/PageLayout.svelte'
 </script>
 
-<PageLayout title="Dashboard">
-	<p class="bg-green-500 text-white">hello</p>
+<PageLayout title="Users">
+	<p class="bg-green-500 text-white">Users</p>
 </PageLayout>
