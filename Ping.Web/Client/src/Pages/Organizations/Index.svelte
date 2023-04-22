@@ -2,7 +2,15 @@
 	import { inertia, page } from '@inertiajs/svelte'
 	import PageLayout from '../../Shared/PageLayout.svelte'
 
-	$: organizations = $page?.props?.organizations ?? []
+	$: organizations = $page?.props?.data
+	$: currentPage = $page?.props?.page
+	$: perPage = $page?.props?.perPage
+	$: total = $page?.props?.total
+	$: pageNumbers = $page?.props?.pageNumbers
+	$: previousButtonDisabled = $page?.props?.previousButtonDisabled
+	$: nextButtonDisabled = $page?.props?.nextButtonDisabled
+
+	console.log($page.props)
 </script>
 
 <PageLayout title="Organizations">
@@ -45,26 +53,26 @@
 		</tbody>
 	</table>
 	<div class="flex items-center py-4">
-		<button
-			class="mb-1 mr-1 rounded border px-4 py-3 text-sm leading-4 hover:bg-white focus:border-indigo-600 focus:text-indigo-600"
-			>Prev</button>
-		<button
-			class="mb-1 mr-1 rounded border bg-white px-4 py-3 text-sm leading-4 hover:bg-white focus:border-indigo-600 focus:text-indigo-600"
-			>1</button>
-		<button
-			class="mb-1 mr-1 rounded border px-4 py-3 text-sm leading-4 hover:bg-white focus:border-indigo-600 focus:text-indigo-600"
-			>2</button>
-		<button
-			class="mb-1 mr-1 rounded border px-4 py-3 text-sm leading-4 hover:bg-white focus:border-indigo-600 focus:text-indigo-600"
-			>3</button>
-		<button
-			class="mb-1 mr-1 rounded border px-4 py-3 text-sm leading-4 hover:bg-white focus:border-indigo-600 focus:text-indigo-600"
-			>4</button>
-		<button
-			class="mb-1 mr-1 rounded border px-4 py-3 text-sm leading-4 hover:bg-white focus:border-indigo-600 focus:text-indigo-600"
-			>5</button>
-		<button
-			class="mb-1 mr-1 rounded border px-4 py-3 text-sm leading-4 hover:bg-white focus:border-indigo-600 focus:text-indigo-600"
-			>Next</button>
+		<a
+			use:inertia
+			href={`/organizations?page=${currentPage - 1}`}
+			class={`mb-1 mr-1 rounded border px-4 py-3 text-sm leading-4 hover:bg-white focus:border-indigo-600 focus:text-indigo-600 ${
+				previousButtonDisabled ? 'pointer-events-none text-gray-400' : ''
+			}`}>Prev</a>
+		{#each pageNumbers as pageNumber}
+			<a
+				use:inertia
+				href={`/organizations?page=${pageNumber}`}
+				class="mb-1 mr-1 rounded border px-4 py-3 text-sm leading-4 hover:bg-white focus:border-indigo-600 focus:text-indigo-600"
+				class:bg-white={currentPage == pageNumber}>
+				{pageNumber}
+			</a>
+		{/each}
+		<a
+			use:inertia
+			href={`/organizations?page=${currentPage + 1}`}
+			class={`mb-1 mr-1 rounded border px-4 py-3 text-sm leading-4 hover:bg-white focus:border-indigo-600 focus:text-indigo-600 ${
+				nextButtonDisabled ? 'pointer-events-none text-gray-400' : ''
+			}`}>Next</a>
 	</div>
 </PageLayout>
