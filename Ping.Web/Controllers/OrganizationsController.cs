@@ -16,11 +16,17 @@ public class OrganizationsController : Controller
         _db = db;
     }
 
-    public async Task<IActionResult> Index([FromQuery] PaginationQuery query)
+    public IActionResult Index([FromQuery] PaginationQuery query)
     {
-        var orgPaginationResult = await _db.Organizations
+        var orgPaginationResult = _db.Organizations
             .AsNoTracking()
-            .Paginate<Organization>(query);
+            .Paginate<Organization>(
+                query,
+                w =>
+                    w.Name.ToLower().Contains(query.search.ToLower()) ||
+                    w.City.ToLower().Contains(query.search.ToLower()) ||
+                    w.Phone.ToLower().Contains(query.search.ToLower())
+            );
         return this.InertiaRender("Organizations/Index", orgPaginationResult);
     }
 }

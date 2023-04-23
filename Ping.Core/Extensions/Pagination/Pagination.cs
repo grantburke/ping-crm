@@ -1,7 +1,5 @@
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Ping.Data.Models;
 
 namespace Ping.Core.Extensions.Pagination;
 
@@ -11,22 +9,22 @@ public static class Pagination
     public const string SORT_ASC = "ASC";
     public const string SORT_DESC = "DESC";
 
-    public static async Task<PaginationResult<TModel>> Paginate<TModel>(this IQueryable<TModel> entities, PaginationQuery paginationQuery, Expression<Func<TModel, bool>> searchFilter = null)
-        where TModel : BaseEntity
+    public static PaginationResult<TModel> Paginate<TModel>(this IQueryable<TModel> entities, PaginationQuery paginationQuery, Expression<Func<TModel, bool>> searchFilter = null)
+        where TModel : class
     {
         var (page, perPage, search, sortColumn, sortDirection) = paginationQuery;
         if (search is not null)
             entities = entities.Where(searchFilter);
 
-        var total = await entities.CountAsync();
+        var total = entities.Count();
 
         if (!string.IsNullOrEmpty(sortColumn))
             entities = entities.OrderBy($"{sortColumn} {sortDirection}");
 
-        var data = await entities
+        var data = entities
             .Skip((page - 1) * perPage)
             .Take(perPage)
-            .ToListAsync();
+            .ToList();
 
         var totalPages = (int)Math.Ceiling(total / (double)perPage);
         var pageNumberList = GetPageNumberList(page, totalPages);

@@ -1,16 +1,23 @@
 <script>
-	import { inertia, page } from '@inertiajs/svelte'
+	import { inertia, page, router } from '@inertiajs/svelte'
 	import PageLayout from '../../Shared/PageLayout.svelte'
+	import debounce from '../../utils'
 
-	$: organizations = $page?.props?.data
-	$: currentPage = $page?.props?.page
-	$: perPage = $page?.props?.perPage
-	$: total = $page?.props?.total
-	$: pageNumbers = $page?.props?.pageNumbers
-	$: previousButtonDisabled = $page?.props?.previousButtonDisabled
-	$: nextButtonDisabled = $page?.props?.nextButtonDisabled
+	let search = ''
 
-	console.log($page.props)
+	$: ({
+		data: organizations,
+		page: currentPage,
+		perPage,
+		total,
+		pageNumbers,
+		previousButtonDisabled,
+		nextButtonDisabled,
+	} = $page.props)
+
+	function handle_search() {
+		router.get('/organizations', { search })
+	}
 </script>
 
 <PageLayout title="Organizations">
@@ -19,8 +26,14 @@
 			<input
 				type="search"
 				class="w-1/2 rounded border-gray-200 shadow placeholder:text-gray-400"
-				placeholder="Search..." />
-			<button class="text-sm text-gray-500">Reset</button>
+				placeholder="Search..."
+				bind:value={search}
+				use:debounce={{
+					search_value: search,
+					func: handle_search,
+					duration: 500,
+				}} />
+			<a href="/organizations" class="text-sm text-gray-500">Reset</a>
 		</div>
 		<a
 			href="/organizations/create"
