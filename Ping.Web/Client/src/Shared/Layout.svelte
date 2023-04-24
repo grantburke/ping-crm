@@ -15,7 +15,6 @@
 			componentName: 'Organizations/Index',
 		},
 		{ name: 'Contacts', url: '/contacts', componentName: 'Contacts/Index' },
-		{ name: 'Reports', url: '/reports', componentName: 'Reports/Index' },
 	]
 
 	const menu_links = [
