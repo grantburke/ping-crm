@@ -5,7 +5,7 @@
 
 	const route = 'contacts'
 	const columns = [
-		{ display: 'Name', name: 'firstname, lastname' },
+		{ display: 'Name', name: 'firstname,lastname' },
 		{ display: 'Organization', name: 'organization.name' },
 		{ display: 'City', name: 'city' },
 		{ display: 'Phone', name: 'phone' },

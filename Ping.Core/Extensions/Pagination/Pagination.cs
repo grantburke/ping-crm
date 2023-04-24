@@ -3,7 +3,6 @@ using System.Linq.Expressions;
 
 namespace Ping.Core.Extensions.Pagination;
 
-
 public static class Pagination
 {
     public const string SORT_ASC = "ASC";
@@ -19,7 +18,11 @@ public static class Pagination
         var total = entities.Count();
 
         if (!string.IsNullOrEmpty(sortColumn))
-            entities = entities.OrderBy($"{sortColumn} {sortDirection}");
+        {
+            var sortColumnList = sortColumn.Split(",").Select(s => $"{s} {sortDirection}");
+            var orderByStr = string.Join(",", sortColumnList);
+            entities = entities.OrderBy(orderByStr);
+        }
 
         var data = entities
             .Skip((page - 1) * perPage)

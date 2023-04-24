@@ -37,12 +37,6 @@
 	}
 
 	function get_data() {
-		console.log({
-			page: currentPage,
-			search,
-			sortColumn: sort_column,
-			sortDirection: sort_direction,
-		})
 		router.get(`/${route}`, {
 			page: currentPage,
 			search,
