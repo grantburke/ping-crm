@@ -53,7 +53,28 @@ public class OrganizationsController : Controller
     [HttpGet("{organizationId:int}/edit")]
     public async Task<IActionResult> Edit([FromRoute] int organizationId)
     {
-        var organization = await GetOrganizationById(organizationId);
+        var organization = await _db.Organizations
+            .AsNoTracking()
+            .Include(i => i.Contacts)
+            .Select(s => new Organization
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Email = s.Email,
+                Phone = s.Phone,
+                Address = s.Address,
+                City = s.City,
+                State = s.State,
+                ZipCode = s.ZipCode,
+                Contacts = s.Contacts.Select(s => new Contact
+                {
+                    FirstName = s.FirstName,
+                    LastName = s.LastName,
+                    City = s.City,
+                    Phone = s.Phone
+                }).ToList()
+            })
+            .FirstOrDefaultAsync(f => f.Id == organizationId);
         return organization is not null
             ? this.InertiaRender("Organizations/Edit", new { organization })
             : NotFound();
@@ -68,7 +89,8 @@ public class OrganizationsController : Controller
             return this.InertiaRender("Organizations/Create", new { errors });
         }
 
-        var currentOrganization = await GetOrganizationById(organizationId);
+        var currentOrganization = await _db.Organizations
+            .FirstOrDefaultAsync(f => f.Id == organizationId);
 
         if (currentOrganization is null)
             return NotFound();
@@ -78,8 +100,4 @@ public class OrganizationsController : Controller
         await _db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
-
-    private async Task<Organization> GetOrganizationById(int organizationId)
-        => await _db.Organizations
-            .FirstOrDefaultAsync(f => f.Id == organizationId);
 }
