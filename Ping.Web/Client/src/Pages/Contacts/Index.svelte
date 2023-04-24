@@ -5,8 +5,7 @@
 
 	const route = 'contacts'
 	const columns = [
-		{ display: 'First Name', name: 'firstname' },
-		{ display: 'Last Name', name: 'lastname' },
+		{ display: 'Name', name: 'firstname, lastname' },
 		{ display: 'Organization', name: 'organization.name' },
 		{ display: 'City', name: 'city' },
 		{ display: 'Phone', name: 'phone' },
@@ -41,8 +40,7 @@
 		</span>
 		{#each contacts as contact}
 			<tr class="text-left focus-within:bg-gray-100 hover:bg-gray-100">
-				<td class="border-t p-4">{contact.firstName}</td>
-				<td class="border-t p-4">{contact.lastName}</td>
+				<td class="border-t p-4">{contact.firstName} {contact.lastName}</td>
 				<td class="border-t p-4">{contact.organization.name}</td>
 				<td class="border-t p-4">{contact.city}</td>
 				<td class="border-t p-4">{contact.phone}</td>
