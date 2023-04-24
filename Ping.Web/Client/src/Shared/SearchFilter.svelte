@@ -1,13 +1,14 @@
 <script>
-	import { router } from '@inertiajs/svelte'
 	import debounce from '../utils'
+	import { createEventDispatcher } from 'svelte'
 
 	export let route = ''
 
+	const dispatcher = createEventDispatcher()
 	let search = ''
 
 	function handle_search() {
-		router.get(`/${route}`, { search })
+		dispatcher('search_filter_change', { search })
 	}
 </script>
 
