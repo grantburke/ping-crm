@@ -6,6 +6,6 @@
 	$: ({ contact, organizations } = $page.props)
 </script>
 
-<PageLayout title="Create Contact">
+<PageLayout title="Edit Contact">
 	<ContactForm method="edit" model={contact} {organizations} />
 </PageLayout>
