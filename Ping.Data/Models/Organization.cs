@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Ping.Data.Models;
 
@@ -27,5 +28,6 @@ public class Organization : BaseEntity
     [Required]
     public string ZipCode { get; set; }
 
+    [ValidateNever]
     public List<Contact> Contacts { get; set; } = new();
 }

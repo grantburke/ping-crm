@@ -3,7 +3,7 @@
 	import PageLayout from '../../Shared/PageLayout.svelte'
 	import OrganizationForm from '../../Shared/OrganizationForm.svelte'
 
-	$: ({ organization } = $page.props)
+	$: ({ contacts, organization } = $page.props)
 </script>
 
 <PageLayout title="Edit Organization">
@@ -18,7 +18,7 @@
 			<th class="p-4">Phone</th>
 		</thead>
 		<tbody>
-			{#each organization.contacts as contact}
+			{#each contacts as contact}
 				<tr class="text-left focus-within:bg-gray-100 hover:bg-gray-100">
 					<td class="border-t p-4"
 						>{contact.firstName} {contact.lastName}</td>

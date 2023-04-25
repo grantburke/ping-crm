@@ -1,25 +1,28 @@
 <script>
 	import { useForm } from '@inertiajs/svelte'
-	import TextInput from '../Shared/TextInput.svelte'
+	import TextInput from './TextInput.svelte'
 
 	export let method = 'create'
 	export let model = {
 		id: 0,
-		name: '',
+		firstName: '',
+		lastName: '',
 		email: '',
 		phone: '',
 		address: '',
 		city: '',
 		state: '',
 		zipCode: '',
+		organizationId: 0,
 	}
+	export let organizations = []
 
 	let form = useForm(model)
 
 	function handle_submit() {
 		$form.clearErrors()
-		if (method !== 'create') $form.put(`/organizations/${$form.id}/edit`)
-		else $form.post(`/organizations/create`)
+		if (method !== 'create') $form.put(`/contacts/${$form.id}/edit`)
+		else $form.post(`/contacts/create`)
 	}
 </script>
 
@@ -28,11 +31,18 @@
 	on:submit|preventDefault={handle_submit}>
 	<TextInput
 		class="py-2"
-		id="name"
-		label="Name"
-		placeholder="Name"
-		bind:value={$form.name}
-		bind:error={$form.errors.name} />
+		id="first_name"
+		label="First Name"
+		placeholder="First Name"
+		bind:value={$form.firstName}
+		bind:error={$form.errors.firstName} />
+	<TextInput
+		class="py-2"
+		id="last_name"
+		label="Last Name"
+		placeholder="Last Name"
+		bind:value={$form.lastName}
+		bind:error={$form.errors.lastName} />
 	<TextInput
 		id="email"
 		class="py-2"
@@ -76,6 +86,21 @@
 		placeholder="Zip Code"
 		bind:value={$form.zipCode}
 		bind:error={$form.errors.zipCode} />
+	<div class="py-2">
+		<label
+			for="organization_id"
+			class="block font-bold leading-6 text-gray-900">Organization</label>
+		<select
+			id="organization_id"
+			class="mt-2 block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+			placeholder="Select an organization"
+			bind:value={$form.organizationId}>
+			<option value="" disabled>Select an organization</option>
+			{#each organizations as organization}
+				<option value={organization.id}>{organization.name}</option>
+			{/each}
+		</select>
+	</div>
 	<div class="py-2">
 		<button
 			type="submit"

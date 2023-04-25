@@ -66,17 +66,11 @@ public class OrganizationsController : Controller
                 City = s.City,
                 State = s.State,
                 ZipCode = s.ZipCode,
-                Contacts = s.Contacts.Select(s => new Contact
-                {
-                    FirstName = s.FirstName,
-                    LastName = s.LastName,
-                    City = s.City,
-                    Phone = s.Phone
-                }).ToList()
             })
             .FirstOrDefaultAsync(f => f.Id == organizationId);
+        var contacts = await GetContactsByOrganizationId(organizationId);
         return organization is not null
-            ? this.InertiaRender("Organizations/Edit", new { organization })
+            ? this.InertiaRender("Organizations/Edit", new { organization, contacts })
             : NotFound();
     }
 
@@ -86,7 +80,8 @@ public class OrganizationsController : Controller
         if (!ModelState.IsValid)
         {
             var errors = ModelState.GetInertiaErrors();
-            return this.InertiaRender("Organizations/Create", new { errors });
+            var contacts = await GetContactsByOrganizationId(organizationId);
+            return this.InertiaRender("Organizations/Edit", new { errors, contacts });
         }
 
         var currentOrganization = await _db.Organizations
@@ -99,5 +94,12 @@ public class OrganizationsController : Controller
         _db.Organizations.Update(currentOrganization);
         await _db.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
+    }
+
+    private async Task<List<Contact>> GetContactsByOrganizationId(int organizationId)
+    {
+        return await _db.Contacts
+            .Where(w => w.OrganizationId == organizationId)
+            .ToListAsync();
     }
 }
