@@ -3,5 +3,8 @@
 </script>
 
 <PageLayout title="Dashboard">
-	<p class="bg-green-500 text-white">hello</p>
+	<p>
+		Hey there! Welcome to Ping CRM, a demo app designed to help illustrate how
+		Inertia.js works.
+	</p>
 </PageLayout>
