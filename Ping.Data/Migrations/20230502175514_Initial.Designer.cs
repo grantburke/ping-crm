@@ -10,7 +10,7 @@ using Ping.Data;
 namespace Ping.Data.Migrations
 {
     [DbContext(typeof(PingDbContext))]
-    [Migration("20230419201035_Initial")]
+    [Migration("20230502175514_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -121,6 +121,9 @@ namespace Ping.Data.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

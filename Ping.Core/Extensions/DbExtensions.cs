@@ -18,7 +18,8 @@ public static class DbExtensions
             {
                 Id = 0,
                 Email = "johndoe@test.com",
-                Password = PasswordHasher.HashPassword("Pass123$")
+                Password = PasswordHasher.HashPassword("Pass123$"),
+                Role = Role.Owner
             });
 
             var contact = new Faker<Contact>()
