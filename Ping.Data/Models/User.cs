@@ -18,6 +18,6 @@ public class User : BaseEntity
 
 public enum Role
 {
-    Owner,
-    User
+    Owner = 1,
+    User = 2
 }

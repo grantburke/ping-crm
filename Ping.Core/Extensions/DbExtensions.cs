@@ -22,6 +22,14 @@ public static class DbExtensions
                 Role = Role.Owner
             });
 
+            db.Users.Add(new User
+            {
+                Id = 0,
+                Email = "janedoe@test.com",
+                Password = PasswordHasher.HashPassword("Pass123$"),
+                Role = Role.User
+            });
+
             var contact = new Faker<Contact>()
                 .RuleFor(m => m.FirstName, f => f.Name.FirstName(f.PickRandom<Gender>()))
                 .RuleFor(m => m.LastName, f => f.Name.LastName(f.PickRandom<Gender>()))
