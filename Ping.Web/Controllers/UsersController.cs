@@ -1,5 +1,6 @@
 ﻿using Inertia.NET.Extensions;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ping.Core.Utils;
@@ -8,6 +9,7 @@ using Ping.Data.Models;
 
 namespace Ping.Web.Controllers;
 
+[Authorize(Roles = "Owner")]
 [Route("users")]
 public class UsersController : Controller
 {

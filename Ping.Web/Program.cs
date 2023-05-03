@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Ping.Core.Extensions;
@@ -10,6 +11,19 @@ var connectionString = builder.Configuration.GetConnectionString("ping.db");
 builder.Services.AddDbContext<PingDbContext>(options =>
     options.UseSqlite(connectionString));
 
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    {
+        options.Cookie.Name = "ping.crm";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.LoginPath = "/login";
+        options.AccessDeniedPath = "/login";
+        options.LogoutPath = "/login";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+    });
 builder.Services.AddRouting(opts => opts.LowercaseUrls = true);
 builder.Services.AddControllersWithViews();
 
@@ -48,7 +62,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
