@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Ping.Core.Extensions;
+using Ping.Core.Infrastructure.Authentication;
 using Ping.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,17 @@ builder.Services
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.Cookie.SameSite = SameSiteMode.Strict;
+    });
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IAuthorizationHandler, UserIdRequirementClaimHandler>();
+builder.Services
+    .AddAuthorization(options =>
+    {
+        options.AddPolicy(PolicyConstants.Owner, policy => policy.RequireRole(PolicyConstants.Owner));
+        options.AddPolicy(PolicyConstants.UserId, policy =>
+        {
+            policy.RequireUserIdClaim();
+        });
     });
 builder.Services.AddRouting(opts => opts.LowercaseUrls = true);
 builder.Services.AddControllersWithViews();

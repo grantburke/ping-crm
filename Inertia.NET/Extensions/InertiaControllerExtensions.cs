@@ -12,9 +12,13 @@ public static class InertiaControllerExtensions
         var response = controller.HttpContext.Response;
         var url = $"{request.Path.Value}{request.QueryString.Value}";
         var version = Guid.NewGuid().ToString().Replace("-", string.Empty);
+        var user = controller.HttpContext.User.Claims.ToDictionary(claim => claim.Type, claim => claim.Value);
+        var propsDictionary = props?.ToDictionary() ?? new Dictionary<string, object?>();
+        if (user.Any())
+            propsDictionary?.TryAdd("auth", user);
         var inertiaPageObject = new InertiaPageObject(
             component,
-            props ?? new { },
+            propsDictionary ?? new Dictionary<string, object?>(),
             url,
             version);
 
@@ -35,5 +39,12 @@ public static class InertiaControllerExtensions
 
         var jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         return controller.View("_Inertia", JsonSerializer.Serialize(inertiaPageObject, jsonOptions));
+    }
+    
+    private static Dictionary<string, object?> ToDictionary(this object obj)
+    {
+        var type = obj.GetType();
+        var properties = type.GetProperties();
+        return properties.ToDictionary(property => JsonNamingPolicy.CamelCase.ConvertName(property.Name), property => property.GetValue(obj, null));
     }
 }

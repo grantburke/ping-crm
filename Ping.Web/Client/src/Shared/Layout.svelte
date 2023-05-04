@@ -7,6 +7,7 @@
 		MenuItem,
 	} from '@rgossiaux/svelte-headlessui'
 
+	$: ({ auth } = $page.props)
 	const nav_links = [
 		{ name: 'Dashboard', url: '/', componentName: 'Dashboard/Index' },
 		{
@@ -19,7 +20,7 @@
 
 	const menu_links = [
 		{ name: 'My Profile', url: '/profile', componentName: '' },
-		{ name: 'Manage Users', url: '/users', componentName: '' },
+		{ name: 'Manage Users', url: '/users', componentName: '', role: 'owner' },
 		{ name: 'Logout', url: '/logout', componentName: '' },
 	]
 
@@ -123,17 +124,18 @@
 							<MenuItems
 								class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
 								{#each menu_links as link}
-									<MenuItem let:active>
-										<a
-											href={link.url}
-											use:inertia
-											class={`${
-												active ? 'bg-gray' : ''
-											} block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100`}
-											role="menuitem"
-											tabindex="-1"
-											id="user-menu-item-0">{link.name}</a>
-									</MenuItem>
+                                    {@const url = link.url === '/profile' ? `/users/${auth?.userId}/edit` : link.url}
+									{#if !link.role || link?.role === auth?.role}
+										<MenuItem let:active>
+											<a
+												href={url}
+												class={`${
+													active ? 'bg-gray' : ''
+												} block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100`}
+												role="menuitem"
+												tabindex="-1">{link.name}</a>
+										</MenuItem>
+									{/if}
 								{/each}
 							</MenuItems>
 						</Menu>
@@ -211,7 +213,7 @@
 							Tom Cook
 						</div>
 						<div class="text-sm font-medium leading-none text-gray-400">
-							tom@example.com
+							{auth?.email}
 						</div>
 					</div>
 				</div>
@@ -220,16 +222,18 @@
 						{@const active =
 							link.componentName === $page.component ||
 							($page.url.startsWith(link.url) && link.url.length > 1)}
-						<a
-							href={link.url}
-							use:inertia
-							class={`block rounded-md px-3 py-2 text-base font-medium ${
-								active
-									? 'bg-gray-900 text-white'
-									: 'text-gray-300 hover:bg-gray-700 hover:text-white'
-							}`}>
-							{link.name}
-						</a>
+                        {@const url = link.url === '/profile' ? `/users/${auth?.userId}/edit` : link.url}
+						{#if !link.role || link?.role === auth?.role}
+							<a
+								href={url}
+								class={`block rounded-md px-3 py-2 text-base font-medium ${
+									active
+										? 'bg-gray-900 text-white'
+										: 'text-gray-300 hover:bg-gray-700 hover:text-white'
+								}`}>
+								{link.name}
+							</a>
+						{/if}
 					{/each}
 				</div>
 			</div>

@@ -2,6 +2,8 @@ import './app.css'
 import { createInertiaApp } from '@inertiajs/svelte'
 import Layout from './Shared/Layout.svelte'
 
+const teamNoLayout = ['Auth/Login']
+
 createInertiaApp({
 	progress: {
 		// color: 'rgb(var(--color-bg-900))',
@@ -12,7 +14,7 @@ createInertiaApp({
 		let page = pages[`./Pages/${name}.svelte`]
 		return {
 			default: page.default,
-			layout: page.layout || Layout,
+			layout: teamNoLayout.includes(name) ? undefined : Layout,
 		}
 	},
 	setup({ el, App, props }) {

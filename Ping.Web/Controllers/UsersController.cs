@@ -3,13 +3,13 @@ using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Ping.Core.Infrastructure.Authentication;
 using Ping.Core.Utils;
 using Ping.Data;
 using Ping.Data.Models;
 
 namespace Ping.Web.Controllers;
 
-[Authorize(Roles = "Owner")]
 [Route("users")]
 public class UsersController : Controller
 {
@@ -19,7 +19,8 @@ public class UsersController : Controller
     {
         _db = db;
     }
-
+    
+    [Authorize(Policy = PolicyConstants.Owner)]
     public async Task<IActionResult> Index()
     {
         var users = await _db.Users
@@ -35,6 +36,7 @@ public class UsersController : Controller
         return this.InertiaRender("Users/Index", new { users = userDtos });
     }
 
+    [Authorize(Policy = PolicyConstants.Owner)]
     [HttpGet("create")]
     public IActionResult Create()
     {
@@ -42,6 +44,7 @@ public class UsersController : Controller
         return this.InertiaRender("Users/Create", new { roles });
     }
 
+    [Authorize(Policy = PolicyConstants.Owner)]
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] User user)
     {
@@ -58,6 +61,7 @@ public class UsersController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Authorize(Policy = PolicyConstants.UserId)]
     [HttpGet("{userId:int}/edit")]
     public async Task<IActionResult> Edit([FromRoute] int userId)
     {
@@ -77,6 +81,7 @@ public class UsersController : Controller
         return this.InertiaRender("Users/Edit", new { user, roles });
     }
 
+    [Authorize(Policy = PolicyConstants.UserId)]
     [HttpPut("{userId:int}/edit")]
     public async Task<IActionResult> Edit([FromRoute] int userId, [FromBody] User user)
     {
@@ -97,7 +102,10 @@ public class UsersController : Controller
         user.Adapt(currentUser);
         _db.Users.Update(currentUser);
         await _db.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+
+        return HttpContext.User.HasClaim(c => c.Type == PolicyConstants.UserId && c.Value == userId.ToString()) 
+            ? RedirectToAction("Index", "Dashboard")
+            : RedirectToAction(nameof(Index));
     }
 
     private List<RoleDto> GetRoles()
