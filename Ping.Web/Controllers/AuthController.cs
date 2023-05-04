@@ -64,7 +64,7 @@ public class AuthController : Controller
         return RedirectToAction("Index", "Dashboard");
     }
 
-    [HttpGet("logout")]
+    [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync();
